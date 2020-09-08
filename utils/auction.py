@@ -57,6 +57,7 @@ async def scan(profileid):
 async def parsebids(uuid):
     bids = []
     times = []
+    tasks = []
     for pages in constants.pages:
         for auctions in pages:
             for x in range(1,len(auctions['bids'])+1):
@@ -77,16 +78,18 @@ async def parsebids(uuid):
                         status = ':x:'
                     yourbid = auctions['bids'][-x]['amount']
                     topbid = auctions['bids'][-1]['amount']
-                    creator = await asyncio.gather(namefromuuid(auctions['auctioneer']))
-                    creator = creator[0]
-                    if creator == APIError:
-                        return APIError
+                    task = asyncio.ensure_future(namefromuuid(auctions['auctioneer']))
+                    tasks.append(task)
                     if auctions['item_name'][:4] == '[Lvl':
-                        bids.append('__{0} {1}__ - {2}\n>>> Top bid: {3:,d}\nYour bid: {4:,d}\nEnding in {5}\nBy {6}'.format(auctions['tier'].capitalize(),auctions['item_name'],status,topbid,yourbid,endtime,creator))
+                        bids.append('__{0} {1}__ - {2}\n>>> Top bid: {3:,d}\nYour bid: {4:,d}\nEnding in {5}\nBy '.format(auctions['tier'].capitalize(),auctions['item_name'],status,topbid,yourbid,endtime))
                         break
                     else:
-                        bids.append('__{0}__ - {1}\n>>> Top bid: {2:,d}\nYour bid: {3:,d}\nEnding in {4}\nBy {5}'.format(auctions['item_name'],status,topbid,yourbid,endtime,creator))
+                        bids.append('__{0}__ - {1}\n>>> Top bid: {2:,d}\nYour bid: {3:,d}\nEnding in {4}\nBy '.format(auctions['item_name'],status,topbid,yourbid,endtime))
                         break
+
+    creators = await asyncio.gather(*tasks)
+    for x in range(len(bids)):
+        bids[x] += creators[x]
     return list(dict.fromkeys(sortbytime(bids,times)))
 
 def stats(profilesjson,uuid):
