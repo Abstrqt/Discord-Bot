@@ -64,18 +64,6 @@ class calculators(commands.Cog):
         elif isinstance(error, commands.CommandInvokeError):
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = 'Invalid Arguments: \n``!calcpet [rarity] [start] [end]``')
             await channel.send(embed=embed)
-        elif isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)               
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)            
 
     @commands.command()
     @commands.check(checks.findindb)
@@ -108,18 +96,6 @@ class calculators(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = 'Missing Arguments: \n``!calcxp [level_start] [level_end]``')
             await channel.send(embed=embed)  
-        elif isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)    
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)                       
 
     @commands.command()
     @commands.check(checks.findindb)
@@ -218,19 +194,6 @@ class calculators(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = 'Missing Arguments: \n``!calcskill [skill] [level]``')
             await channel.send(embed=embed)
-        elif isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)   
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)                        
-
 
 def setup(client):
     client.add_cog(calculators(client))

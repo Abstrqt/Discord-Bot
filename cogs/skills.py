@@ -175,22 +175,6 @@ class skills(commands.Cog):
         except APIDisabledError:
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '~~Skill API~~')
             await msg.edit(embed=embed)        
-    @skills.error
-    async def skills_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)  
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)            
-
 
 def setup(client):
     client.add_cog(skills(client))

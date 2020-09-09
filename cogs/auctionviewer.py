@@ -18,8 +18,8 @@ class auctionviewer(commands.Cog):
         self.client= client
 
     @commands.command(aliases=['ahview','ahmenu','ah','bids','ahstats'])
-    @commands.check(checks.findindb)
     @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.check(checks.findindb)
     async def auctionviewer(self,ctx, ign = ""):
         content = ctx.message.content
         channel = ctx.channel  
@@ -317,23 +317,6 @@ class auctionviewer(commands.Cog):
         except NeverPlayedSkyblockError as uname:
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} has no skyblock profiles'.format(uname))
             await msg.edit(embed=embed)      
-   
-    @auctionviewer.error
-    async def auctionviewer_error(self, ctx, error):
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)   
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
-            
+               
 def setup(client):
     client.add_cog(auctionviewer(client))

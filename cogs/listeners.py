@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import datetime
 
 import pymongo
 from pymongo import MongoClient
@@ -26,5 +27,30 @@ class listeners(commands.Cog):
         if isinstance(error, commands.CommandNotFound):
             pass
 
+        elif isinstance(error, commands.CheckFailure):
+            if 'command verify' not in str(error):
+                em1 = discord.Embed(title = 'Error!',
+                                    color = discord.Color.red(),
+                                    timestamp = datetime.datetime.utcnow(),
+                                    description = 'Please verify with the bot before sending commands')
+            else:
+                em1 = discord.Embed(title = 'Error!',
+                                color = discord.Color.red(),
+                                timestamp = datetime.datetime.utcnow(),
+                                description = 'Please verify on the [main server](https://discord.gg/CeZ3vSn)!')
+            return await ctx.channel.send(embed=em1)   
+
+        elif isinstance(error, commands.CommandOnCooldown):
+            em1 = discord.Embed(title = 'Error!',
+                    color = discord.Color.red(),
+                    timestamp = datetime.datetime.utcnow(),
+                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
+            return await ctx.channel.send(embed=em1)   
+
+        elif isinstance(error, commands.MissingRequiredArgument):
+            pass
+        
+        else:
+            return await ctx.send(error)
 def setup(client):
     client.add_cog(listeners(client))

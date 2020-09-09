@@ -3,7 +3,7 @@ from discord.ext import commands
 import datetime
 import asyncio
 
-from lib import api
+from lib import api, checks
 from utils import user
 from lib.exceptions import *
 
@@ -21,6 +21,7 @@ class verify(commands.Cog):
 
     @commands.command()
     @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.check(checks.checkguild)
     async def verify(self,ctx):
         channel = ctx.channel
         embed = discord.Embed(title = 'Verification Process Started!', 
@@ -155,17 +156,6 @@ class verify(commands.Cog):
         await ctx.author.send(embed=embed)
         await member.add_roles(role)
         await member.edit(nick=discordtag[0][1])
-
-    @verify.error
-    async def verify_error(self, ctx, error):
-        channel = ctx.channel
-        if isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)        
-    
 
 def setup(client):
     client.add_cog(verify(client))

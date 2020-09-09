@@ -54,22 +54,6 @@ class profile(commands.Cog):
         except InvalidIGN as ign:
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid ign'.format(ign))
             await msg.edit(embed=embed)
-    @profile.error
-    async def profile_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)    
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)                      
-
 
 def setup(client):
     client.add_cog(profile(client))

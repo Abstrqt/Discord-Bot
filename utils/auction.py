@@ -88,6 +88,8 @@ async def parsebids(uuid):
                         break
 
     creators = await asyncio.gather(*tasks)
+    if APIError in creators:
+        return APIError
     for x in range(len(bids)):
         bids[x] += creators[x]
     return list(dict.fromkeys(sortbytime(bids,times)))

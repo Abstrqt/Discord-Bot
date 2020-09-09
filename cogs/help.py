@@ -111,16 +111,7 @@ class help(commands.Cog):
             embed.add_field(name = ':game_die: Auction House', value = '```auctionviewer```',inline=False)
             embed.add_field(name = ':thinking: Calculators', value = '```calcpet, calcskill, calcxp```',inline=False)
             embed.add_field(name = ':mag_right: Misc.', value = '```botstats, info```',inline=False)
-            await channel.send(embed=embed)                     
-    @help.error
-    async def help_error(self, ctx, error):
-        channel = ctx.channel
-        if isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)                                                                                     
+            await channel.send(embed=embed)                                                                                                 
 
 def setup(client):
     client.add_cog(help(client))

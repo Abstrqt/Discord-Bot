@@ -67,24 +67,6 @@ class player_stats(commands.Cog):
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid profile'.format(profile))
             await msg.edit(embed=embed) 
 
-    @bank.error
-    async def bank_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)  
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
-
-
     @commands.command(aliases=['ms','milestones'])
     @commands.check(checks.findindb)
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -140,22 +122,6 @@ class player_stats(commands.Cog):
         except BadProfileError as profile:              
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid profile'.format(profile))
             await msg.edit(embed=embed) 
-    @milestone.error
-    async def milestone_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)      
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
 
     @commands.command()
     @commands.check(checks.findindb)
@@ -205,22 +171,6 @@ class player_stats(commands.Cog):
         except BadProfileError as profile:              
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid profile'.format(profile))
             await msg.edit(embed=embed) 
-    @purse.error
-    async def purse_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)  
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
 
     @commands.command(aliases=['slayer'])
     @commands.check(checks.findindb)
@@ -335,22 +285,6 @@ class player_stats(commands.Cog):
         except BadProfileError as profile:              
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid profile'.format(profile))
             await msg.edit(embed=embed) 
-    @slayers.error
-    async def slayers_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)  
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
 
     @commands.command(aliases=['pet'])
     @commands.cooldown(1, 3, commands.BucketType.user)
@@ -459,22 +393,6 @@ class player_stats(commands.Cog):
         except BadProfileError as profile:              
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid profile'.format(profile))
             await msg.edit(embed=embed)   
-    @pets.error
-    async def pets_error(self,ctx,error):  
-        channel = ctx.channel
-        if isinstance(error, commands.CheckFailure):
-            em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify with the bot before sending commands')
-            return await channel.send(embed=em1)      
-        elif isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
 
 def setup(client):
     client.add_cog(player_stats(client))

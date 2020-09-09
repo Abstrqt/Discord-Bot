@@ -38,15 +38,5 @@ class botstats(commands.Cog):
         embed.add_field(name = 'Total Queries', value = '>>> {:,d}'.format(qinfo[0]), inline = True     )
         await channel.send(embed=embed)
 
-    @botstats.error
-    async def botstats_error(self, ctx, error):
-        channel = ctx.channel
-        if isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)
-
 def setup(client):
     client.add_cog(botstats(client))

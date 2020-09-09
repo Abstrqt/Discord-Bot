@@ -11,3 +11,9 @@ def findindb(ctx):
         return True
     else:
         return False
+
+def checkguild(ctx):
+    if ctx.guild.id == 733822566120161411:
+        return True
+    else:
+        return False

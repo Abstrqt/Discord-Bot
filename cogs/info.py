@@ -18,16 +18,7 @@ class info(commands.Cog):
         embed.add_field(name = 'How does it work?', value = 'The bot sends asynchronous http requests to [Hypixel\'s Public API](https://api.hypixel.net/) for information about users when they use commands. For commands such as !bids, which takes up to 50 queries per command, the data is stored locally so the bot doesn\'t exceed 120 queries/min to the API.',inline=False)
         embed.add_field(name = 'Special Thanks', value = 'Much love to lil_tle, ilysmt, and other Hypixel bot makers for their help and insipration :heart:',inline=False)
         embed.add_field(name = 'Enjoy!', value = '-abstrqt',inline=False)
-        await channel.send(embed=embed)
-    @info.error
-    async def info_error(self, ctx, error):
-        channel = ctx.channel
-        if isinstance(error, commands.CommandOnCooldown):
-            em1 = discord.Embed(title = 'Error!',
-                    color = discord.Color.red(),
-                    timestamp = datetime.datetime.utcnow(),
-                    description = f'This command is on cooldown for you! Please try again in {error.retry_after:.2f}s.')
-            return await ctx.send(embed=em1)        
+        await channel.send(embed=embed)  
 
 def setup(client):
     client.add_cog(info(client))
