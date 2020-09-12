@@ -110,7 +110,7 @@ class help(commands.Cog):
             embed.add_field(name = 'Aliases', value = '```None```',inline=False)
             embed.add_field(name = 'Example', value = '```!events```',inline=False)
             await channel.send(embed=embed)     
-        elif view == 'serverconfig':
+        elif view == 'Serverconfig':
             embed = discord.Embed(title = 'Serverconfig Command', color = discord.Color.blue(), description = 'Usage: ``!serverconfig [type]``')
             embed.add_field(name = 'Info', value = ' Sets server configurations',inline=False)
             embed.add_field(name = 'Aliases', value = '```None```',inline=False)
