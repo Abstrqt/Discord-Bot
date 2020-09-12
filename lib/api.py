@@ -99,4 +99,15 @@ def guildinfo(uuid):
             return None
     except APIError:
         return APIError
-    
+
+async def eventtime(url):
+    base_url = "https://hypixel-api.inventivetalent.org/api/skyblock/"
+    try:
+        async with ClientSession() as session:
+            async with session.get(base_url+url) as response:
+                if response.status != 200:
+                    raise APIError
+                response_json = await response.json()
+                return response_json['estimate']/1000
+    except APIError:
+        return APIError

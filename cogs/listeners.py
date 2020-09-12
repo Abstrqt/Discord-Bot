@@ -28,16 +28,21 @@ class listeners(commands.Cog):
             pass
 
         elif isinstance(error, commands.CheckFailure):
-            if 'command verify' not in str(error):
+            if 'command verify' in str(error):
+                em1 = discord.Embed(title = 'Error!',
+                                color = discord.Color.red(),
+                                timestamp = datetime.datetime.utcnow(),
+                                description = 'Please verify on the [main server](https://discord.gg/CeZ3vSn)!')                                    
+            elif 'command serverconfig' in str(error):
+                em1 = discord.Embed(title = 'Error!',
+                                    color = discord.Color.red(),
+                                    timestamp = datetime.datetime.utcnow(),
+                                    description = 'You need administrator permissions in this server to do that')                
+            else:
                 em1 = discord.Embed(title = 'Error!',
                                     color = discord.Color.red(),
                                     timestamp = datetime.datetime.utcnow(),
                                     description = 'Please verify with the bot before sending commands')
-            else:
-                em1 = discord.Embed(title = 'Error!',
-                                color = discord.Color.red(),
-                                timestamp = datetime.datetime.utcnow(),
-                                description = 'Please verify on the [main server](https://discord.gg/CeZ3vSn)!')
             return await ctx.channel.send(embed=em1)   
 
         elif isinstance(error, commands.CommandOnCooldown):
@@ -49,8 +54,9 @@ class listeners(commands.Cog):
 
         elif isinstance(error, commands.MissingRequiredArgument):
             pass
-        
+
         else:
             return await ctx.send(error)
+            
 def setup(client):
     client.add_cog(listeners(client))

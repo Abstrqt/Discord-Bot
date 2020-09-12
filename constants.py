@@ -1,5 +1,15 @@
 import os
 
+skyevents = {'Magma Boss': {'url': "bosstimer/magma/estimatedSpawn", 'relative': 0, 'time': 0},
+        'Bank Interest': {'url': "bank/interest/estimate", 'relative': 0, 'time': 0},
+        'New Year Celebration': {'url': "newyear/estimate", 'relative': 0, 'time': 0},
+        'Dark Auction': {'url': "darkauction/estimate", 'relative': 0, 'time': 0},
+        'Spooky Festival': {'url': "spookyFestival/estimate", 'relative': 0, 'time': 0},
+        'Winter Island Opening': {'url': "winter/estimate", 'relative': 0, 'time': 0},
+        'Jerry Workshop': {'url': "jerryWorkshop/estimate", 'relative': 0, 'time': 0},
+        'Zoo': {'url': "zoo/estimate", 'relative': 0, 'time': 0}
+}
+
 petxp=[ 100, 110, 120, 130, 145, 160, 175, 190, 210, 230,
         250, 275, 300, 330, 360, 400, 440, 490, 540, 600,
         660, 730, 800, 880, 960, 1050, 1150, 1260, 1380, 1510,

@@ -103,14 +103,26 @@ class help(commands.Cog):
             embed.add_field(name = 'Info', value = 'Displays bot information',inline=False)
             embed.add_field(name = 'Aliases', value = '```None```',inline=False)
             embed.add_field(name = 'Example', value = '```!info```',inline=False)
-            await channel.send(embed=embed)                                 
+            await channel.send(embed=embed)
+        elif view == 'Events':
+            embed = discord.Embed(title = 'Events Command', color = discord.Color.blue(), description = 'Usage: ``!events``')
+            embed.add_field(name = 'Info', value = 'Displays Skyblock event times',inline=False)
+            embed.add_field(name = 'Aliases', value = '```None```',inline=False)
+            embed.add_field(name = 'Example', value = '```!events```',inline=False)
+            await channel.send(embed=embed)     
+        elif view == 'serverconfig':
+            embed = discord.Embed(title = 'Serverconfig Command', color = discord.Color.blue(), description = 'Usage: ``!serverconfig [type]``')
+            embed.add_field(name = 'Info', value = ' Sets server configurations',inline=False)
+            embed.add_field(name = 'Aliases', value = '```None```',inline=False)
+            embed.add_field(name = 'Example', value = 'Sets channel to event channel where bot will display event times\n```!serverconfig or !serverconfig events```',inline=False)
+            await channel.send(embed=embed)                                                       
         else:
             embed = discord.Embed(title = 'Help Menu', color = discord.Color.blue(), description = 'For more information about a command, type !help [command]\nFor example: ``!help verify``\nNote that <> indicates a necessary argument and [] means an argument can be ommited')
-            embed.add_field(name = ':tools: General', value = '```verify, help, profile```',inline=False)
+            embed.add_field(name = ':tools: General', value = '```verify, help, profile, events```',inline=False)
             embed.add_field(name = ':muscle: Player Stats', value = '```bank, purse, milestones, pets, skills, slayers```',inline=False)
             embed.add_field(name = ':game_die: Auction House', value = '```auctionviewer```',inline=False)
             embed.add_field(name = ':thinking: Calculators', value = '```calcpet, calcskill, calcxp```',inline=False)
-            embed.add_field(name = ':mag_right: Misc.', value = '```botstats, info```',inline=False)
+            embed.add_field(name = ':mag_right: Misc.', value = '```botstats, info, serverconfig```',inline=False)
             await channel.send(embed=embed)                                                                                                 
 
 def setup(client):
