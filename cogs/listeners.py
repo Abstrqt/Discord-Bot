@@ -33,7 +33,7 @@ class listeners(commands.Cog):
                                 color = discord.Color.red(),
                                 timestamp = datetime.datetime.utcnow(),
                                 description = 'Please verify on the [main server](https://discord.gg/CeZ3vSn)!')                                    
-            elif 'command serverconfig' in str(error):
+            elif 'Administrator' in str(error):
                 em1 = discord.Embed(title = 'Error!',
                                     color = discord.Color.red(),
                                     timestamp = datetime.datetime.utcnow(),
