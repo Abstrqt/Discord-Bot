@@ -87,6 +87,30 @@ def allskills(uuid,profilejson):
 
     return out
 
+def dungeonskills(uuid,profilejson):
+    # Info for all skills
+    skills = ['mage','berserker','tank','healer','archer']
+    out = {}
+    totalxp = 0
+    skillsum = 0
+    for skill in skills:
+        try:
+            if skill == 'berserker':
+                xp = profilejson['profile']['members'][uuid]['dungeons']['player_classes']['berserk']['experience']
+            else:
+                xp = profilejson['profile']['members'][uuid]['dungeons']['player_classes'][skill]['experience']
+        except KeyError:
+            return APIDisabledError
+
+        level = closest(list(itertools.accumulate(constants.dungeonxp)),xp)
+        if level >= 27:
+            level = '27+'
+
+        out[skill.capitalize()] = [level,nicenum(xp)]
+    
+    return out
+
+
 def cleanskills(uuid,profilejson):
     # Info for all skills
     skills = ['combat','foraging','farming','fishing','alchemy','enchanting','mining','taming','runecrafting','carpentry']

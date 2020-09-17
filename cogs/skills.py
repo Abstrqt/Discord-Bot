@@ -174,7 +174,143 @@ class skills(commands.Cog):
             await msg.edit(embed=embed)      
         except APIDisabledError:
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '~~Skill API~~')
-            await msg.edit(embed=embed)        
+            await msg.edit(embed=embed)    
+
+    @commands.command(aliases=['ds','dungeonskill'])
+    @commands.check(checks.findindb)
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def dungeonskills(self,ctx,*args):
+        channel = ctx.channel
+        em1 = discord.Embed(title = 'Calculating . . .', color = 0x5e7dc5)
+        em1.add_field(name = 'Please be patient', value = '\u200b', inline= False)
+        msg =  await channel.send(embed=em1)
+        member = ctx.message.author
+
+        #Parse Args
+        propernames = ['mage','healer','berserker','archer','tank']
+        skill = 'general'
+        args = list(args)
+        for arg in args:
+            for names in propernames:
+                if arg in names:
+                    args.remove(arg)
+                    skill = names
+        if len(args) >= 1:
+            ign = args[0]
+        else:
+            ign = ''
+
+        try:
+            profileinfo = await findprofile(ign, member, '')
+            if profileinfo == InvalidIGN:
+                if ign == '':
+                    ign = 'Your cached ign'
+                raise InvalidIGN(ign)
+            elif profileinfo == APIError:
+                raise APIError
+            elif profileinfo == HypixelAPIThrottle:
+                raise HypixelAPIThrottle
+            elif profileinfo == NeverPlayedSkyblockError:
+                raise NeverPlayedSkyblockError(ign)
+
+            profilejson = await playerjson(profileinfo[3])
+            skills = player.dungeonskills(profileinfo[1], profilejson)
+            if skills == APIDisabledError:
+                raise APIDisabledError
+
+            bonustype = {'mage':['✨', 2],
+                        'healer':['⚕️', 3],
+                        'berserker':['🗡️', 4],
+                        'archer':['🏹', 5],
+                        'tank':['🛡️', 6]
+                        }
+
+            def general():
+                embed = discord.Embed(title = 'Dungeoneering Skills - {0} ({1})'.format(profileinfo[0],profileinfo[2]), 
+                                    color = discord.Color.blue(), 
+                                    timestamp = datetime.datetime.utcnow())
+                embed.set_footer(icon_url = member.avatar_url, 
+                                text = 'Note: Class levels may not be accurate due to limited xp tables\nRequested by {0}'.format(ctx.author))
+                embed.set_thumbnail(url = 'https://visage.surgeplay.com/head/{}'.format(profileinfo[1]))       
+                for skill in skills:
+                    embed.add_field(name = '{} {} {}'.format(bonustype[skill.lower()][0], skill, skills[skill][0]), 
+                                    value = '\u200b',
+                                    inline = False)
+
+                return embed                                    
+
+            def commonskill(skill):
+                embed = discord.Embed(title = '{0} Skill - {1} ({2})'.format(skill,profileinfo[0],profileinfo[2]), 
+                                    color = discord.Color.blue(), 
+                                    timestamp = datetime.datetime.utcnow())
+                embed.set_footer(icon_url = member.avatar_url, 
+                                text = 'Requested by {0}'.format(ctx.author))
+                embed.set_thumbnail(url = 'https://visage.surgeplay.com/head/{}'.format(profileinfo[1]))             
+                embed.add_field(name = '{0} {1} {2}'.format(bonustype[skill.lower()][0],skill,skills[skill][0]), 
+                                value = 'Total Progress: **{}** XP'.format(skills[skill][1]),
+                                inline=False)   
+                embed.add_field(name='More info added soon',
+                                value='\u200b')
+
+                return embed
+
+            if skill.lower() in propernames:
+                page = bonustype[skill.lower()][1]
+                await msg.edit(embed=commonskill(skill.capitalize()))
+            else:
+                page = 1
+                await msg.edit(embed = general())
+
+            emojis = ['◀️','✨','⚕️','🗡️','🏹','🛡️']
+
+            #Reaction Menu
+            def check(reaction, user):
+                return user == ctx.author and str(reaction.emoji) in emojis and reaction.message.id == msg.id
+
+            async def add_reactions():
+                for emoji in emojis:
+                    await msg.add_reaction(emoji)
+            
+            self.client.loop.create_task(add_reactions())
+
+            while True:                       
+                try:
+                    reaction, user = await self.client.wait_for("reaction_add", timeout=30, check=check)
+                    if str(reaction.emoji) == "◀️" and page != 1:
+                        page = 1                                        
+                        await msg.edit(embed=general())
+                        await msg.remove_reaction(reaction, user)
+                    elif str(reaction.emoji) != "◀️":
+                        for skill in bonustype:
+                            if str(reaction.emoji) in bonustype[skill] and page not in bonustype[skill]:
+                                page = bonustype[skill][1]
+                                await msg.edit(embed=commonskill(skill.capitalize()))
+                                await msg.remove_reaction(reaction, user)   
+                            elif str(reaction.emoji) in bonustype[skill] and page in bonustype[skill]:
+                                await msg.remove_reaction(reaction, user)                                                                                             
+                    else:
+                        await msg.remove_reaction(reaction, user)
+
+                except asyncio.TimeoutError:
+                    await msg.clear_reactions()
+                    break            
+
+
+        except InvalidIGN as ign:
+            embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} is not a valid ign'.format(ign))
+            await msg.edit(embed=embed)
+        except APIError:
+            embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = 'There was an issue contacting the API')
+            await msg.edit(embed=embed)
+        except HypixelAPIThrottle:
+            embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = 'The API token is being used way too much. Try again in 1 minute')
+            await msg.edit(embed=embed)
+        except NeverPlayedSkyblockError as uname:
+            embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '{} has no skyblock profiles'.format(uname))
+            await msg.edit(embed=embed)      
+        except APIDisabledError:
+            embed = discord.Embed(title = 'Error!', color = discord.Color.red(), description = '~~Skill API~~')
+            await msg.edit(embed=embed)               
 
 def setup(client):
     client.add_cog(skills(client))

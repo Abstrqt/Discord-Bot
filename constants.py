@@ -33,6 +33,10 @@ runecraftingxp=[0, 50, 100, 125, 160, 200, 250, 315, 400, 500, 625,
                  785, 1000, 1250, 1600, 2000, 2465, 3125, 4000, 5000, 6200,
                  7800, 9800, 12200, 15300,19200]
 
+dungeonxp = [0, 50, 75, 110, 160, 230, 330, 470, 670, 950, 1340, 
+                1800, 2600, 3700, 5200, 7300, 10000, 14400, 20000, 27000, 38000,
+                52000, 72000, 97000, 132000, 180000, 243000, 328000]
+
 talismanreforges = ['Bizarre','Ominous','Simple','Strange','Pleasant',
                     'Shiny','Vivid','Pretty','Itchy','Keen','Unpleasant','Superior',
                     'Forceful', 'Hurtful', 'Strong', 'Demonic', 'Zealous', 'Godly',
