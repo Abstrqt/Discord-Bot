@@ -34,7 +34,7 @@ async def scan(profileid):
             seconds = float('%s' % (playerah['auctions'][-x]['end']/1000-time.time()))
             times.append(seconds)
             hours = int(seconds/3600)
-            minutes = int((seconds/3600)%1*60)
+            minutes = int((seconds%3600)/60)
             if hours > 0:
                 endtime = '{} hours and {} minutes'.format(hours,minutes)
             elif minutes > 0:
@@ -43,15 +43,15 @@ async def scan(profileid):
                 endtime = '{} seconds'.format(int(seconds))
             try:
                 if playerah['auctions'][-x]['bin'] == True:
-                    out['active'].append('__{} {}__ (Bin)\nBin Amount: {:,d}\nEnding in {}'.format(playerah['auctions'][-x]['tier'].capitalize(),playerah['auctions'][-x]['item_name'],playerah['auctions'][-x]['starting_bid'],endtime))
+                    out['active'].append('__{} {}__ (Bin)\n>>> Bin Amount: {:,d}\nEnding in {}'.format(playerah['auctions'][-x]['tier'].capitalize(),playerah['auctions'][-x]['item_name'],playerah['auctions'][-x]['starting_bid'],endtime))
             except KeyError:
-                out['active'].append('__{} {}__ (Auction)\nHighest Bid: {:,d}\nBids: {}\nEnding in {}'.format(playerah['auctions'][-x]['tier'].capitalize(),playerah['auctions'][-x]['item_name'],playerah['auctions'][-x]['highest_bid_amount'],len(playerah['auctions'][-x]['bids']),endtime))
+                out['active'].append('__{} {}__ (Auction)\n>>> Highest Bid: {:,d}\nBids: {}\nEnding in {}'.format(playerah['auctions'][-x]['tier'].capitalize(),playerah['auctions'][-x]['item_name'],playerah['auctions'][-x]['highest_bid_amount'],len(playerah['auctions'][-x]['bids']),endtime))
         if playerah['auctions'][-x]['claimed'] == False and playerah['auctions'][-x]['end']/1000 <= comparetime:
             if playerah['auctions'][-x]['highest_bid_amount'] > 0:
                 out['unclaimed'].append(playerah['auctions'][-x]['highest_bid_amount'])
             else:
                 out['unsold'].append(playerah['auctions'][-x]['item_name'])
-    out['active'] = list(dict.fromkeys(sortbytime(out['active'],times)))
+    out['active'] = sortbytime(out['active'],times)
     return out
 
 async def parsebids(uuid):
@@ -65,7 +65,7 @@ async def parsebids(uuid):
                     seconds = float('%s' % (auctions['end']/1000-time.time()))
                     times.append(seconds)
                     hours = int(seconds/3600)
-                    minutes = int((seconds/3600)%1*60)
+                    minutes = int((seconds%3600)/60)
                     if hours > 0:
                         endtime = '{} hours and {} minutes'.format(hours,minutes)
                     elif minutes > 0:
@@ -92,7 +92,7 @@ async def parsebids(uuid):
         return APIError
     for x in range(len(bids)):
         bids[x] += creators[x]
-    return list(dict.fromkeys(sortbytime(bids,times)))
+    return sortbytime(bids,times)
 
 def stats(profilesjson,uuid):
     try:

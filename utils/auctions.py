@@ -9,6 +9,8 @@ import constants
 
 async def getpage(url,session):
     async with session.get(url) as response:
+        if response.status != 200:
+            return APIError
         response_json = await response.json()
         constants.pages.append(response_json['auctions'])
         return response_json
