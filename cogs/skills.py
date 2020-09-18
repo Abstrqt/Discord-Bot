@@ -218,11 +218,11 @@ class skills(commands.Cog):
             if skills == APIDisabledError:
                 raise APIDisabledError
 
-            bonustype = {'mage':['✨', 2],
-                        'healer':['⚕️', 3],
-                        'berserker':['🗡️', 4],
-                        'archer':['🏹', 5],
-                        'tank':['🛡️', 6]
+            bonustype = {'mage':['✨', 3, ['Renew','Healing Aura','Revive'],['Healing Circle','Wish'],['Healing Potion','Revive Self']],
+                        'healer':['⚕️', 2, ['Mage Staff','Efficient Spells'],['Guided Sheep','Thunderstorm'],['Pop-up Wall','Fireball']],
+                        'berserker':['🗡️', 4, ['Bloodlust'],['Throwing Axe','Ragnarok'],['Strength Potion','Ghost Axe']],
+                        'archer':['🏹', 5, ['Doubleshot','Bone Plating','Bouncy Arrows'],['Explosive Shot','Machine Gun Bow'],['Drop Arrows','Stun Bow']],
+                        'tank':['🛡️', 6, ['Protective Barrier','Taunt'],['Seismic Wave','Castle of Stone'],['Stun Potion','Absorption Potion']]
                         }
 
             def general():
@@ -232,11 +232,17 @@ class skills(commands.Cog):
                 embed.set_footer(icon_url = member.avatar_url, 
                                 text = 'Note: Class levels may not be accurate due to limited xp tables\nRequested by {0}'.format(ctx.author))
                 embed.set_thumbnail(url = 'https://visage.surgeplay.com/head/{}'.format(profileinfo[1]))       
+                embedcounter = 0
                 for skill in skills:
+                    embedcounter += 1
+                    if embedcounter > 5:
+                        break
                     embed.add_field(name = '{} {} {}'.format(bonustype[skill.lower()][0], skill, skills[skill][0]), 
                                     value = '\u200b',
                                     inline = False)
-
+                embed.add_field(name = 'Total Dungeon Skill XP\n{}'.format(skills['totalxp']), 
+                                value = '\u200b',
+                                inline = False)            
                 return embed                                    
 
             def commonskill(skill):
@@ -244,13 +250,16 @@ class skills(commands.Cog):
                                     color = discord.Color.blue(), 
                                     timestamp = datetime.datetime.utcnow())
                 embed.set_footer(icon_url = member.avatar_url, 
-                                text = 'Requested by {0}'.format(ctx.author))
-                embed.set_thumbnail(url = 'https://visage.surgeplay.com/head/{}'.format(profileinfo[1]))             
+                                text = 'Requested by {0}'.format(ctx.author))          
                 embed.add_field(name = '{0} {1} {2}'.format(bonustype[skill.lower()][0],skill,skills[skill][0]), 
                                 value = 'Total Progress: **{}** XP'.format(skills[skill][1]),
                                 inline=False)   
-                embed.add_field(name='More info added soon',
-                                value='\u200b')
+                embed.add_field(name='Class Passives',
+                                value='\n'.join(bonustype[skill.lower()][2]))
+                embed.add_field(name='Dungeon Orb Abilities',
+                                value='\n'.join(bonustype[skill.lower()][3]))    
+                embed.add_field(name='Ghost Abilities',
+                                value='\n'.join(bonustype[skill.lower()][4]))                                                            
 
                 return embed
 
@@ -261,7 +270,7 @@ class skills(commands.Cog):
                 page = 1
                 await msg.edit(embed = general())
 
-            emojis = ['◀️','✨','⚕️','🗡️','🏹','🛡️']
+            emojis = ['◀️','⚕️','✨','🗡️','🏹','🛡️']
 
             #Reaction Menu
             def check(reaction, user):

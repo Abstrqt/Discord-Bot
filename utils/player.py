@@ -89,7 +89,7 @@ def allskills(uuid,profilejson):
 
 def dungeonskills(uuid,profilejson):
     # Info for all skills
-    skills = ['mage','berserker','tank','healer','archer']
+    skills = ['healer','mage','berserker','archer','tank']
     out = {}
     totalxp = 0
     skillsum = 0
@@ -105,9 +105,9 @@ def dungeonskills(uuid,profilejson):
         level = closest(list(itertools.accumulate(constants.dungeonxp)),xp)
         if level >= 27:
             level = '27+'
-
+        totalxp += xp
         out[skill.capitalize()] = [level,nicenum(xp)]
-    
+    out['totalxp'] = nicenum(totalxp)
     return out
 
 
