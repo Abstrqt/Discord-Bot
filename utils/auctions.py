@@ -5,7 +5,7 @@ import time
 
 from aiohttp import ClientSession
 import constants
-
+from lib.exceptions import *
 
 async def getpage(url,session):
     async with session.get(url) as response:
