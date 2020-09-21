@@ -1,6 +1,8 @@
 import constants
 import itertools
 from lib.exceptions import *
+import asyncio
+from utils import auctions
 
 def nicenum(num):
     # Convert into num shorthand
@@ -20,6 +22,19 @@ def closest(lst, k):
         if level > k:
             return lst.index(level)-1
     return lst.index(level)
+
+def formattime(timestamp):
+    seconds = int(timestamp)/1000
+    hours = int(seconds/3600)
+    minutes = int((seconds%3600)/60)
+    seconds = int(seconds%60)
+    if hours > 0:
+        endtime = '{} hours and {} minutes'.format(hours,minutes)
+    elif minutes > 0:
+        endtime = '{} minutes and {} seconds'.format(minutes,seconds)
+    else:
+        endtime = '{} seconds'.format(seconds)
+    return endtime
 
 def skillbonus(skill, level):
     # Find skill bonus
@@ -103,13 +118,67 @@ def dungeonskills(uuid,profilejson):
             return APIDisabledError
 
         level = closest(list(itertools.accumulate(constants.dungeonxp)),xp)
-        if level >= 27:
-            level = '27+'
+        skillsum += level
+
+        if level < 50:
+            nextxp = nicenum(xp-sum(constants.dungeonxp[:level+1]))
+            nextlevel = nicenum(constants.dungeonxp[level+1])
+        else:
+            nextxp = None
+            nextlevel = None
+
         totalxp += xp
-        out[skill.capitalize()] = [level,nicenum(xp)]
+        out[skill.capitalize()] = [level,nicenum(xp), nextxp, nextlevel]
     out['totalxp'] = nicenum(totalxp)
+    out['average'] = skillsum/5
+    out['skilltotal'] = nicenum(sum(constants.dungeonxp))
     return out
 
+def dtypestats(uuid, profilejson):
+    dungeontypes = ['catacombs']
+    out = {}
+    for dungeons in dungeontypes:
+        try:
+            xp = profilejson['profile']['members'][uuid]['dungeons']['dungeon_types']['catacombs']['experience']
+        except KeyError:
+            return APIDisabledError
+
+        level = closest(list(itertools.accumulate(constants.dungeonxp)),xp)
+        if level < 50:
+            nextxp = nicenum(xp-sum(constants.dungeonxp[:level+1]))
+            nextlevel = nicenum(constants.dungeonxp[level+1])
+        else:
+            nextxp = None
+            nextlevel = None
+
+        out[dungeons.capitalize()] = [level,nicenum(xp), nextxp, nextlevel, constants.catacombsbonus[level]]
+
+    out['skilltotal'] = nicenum(sum(constants.dungeonxp))
+    out['selectedclass'] = profilejson['profile']['members'][uuid]['dungeons']['selected_dungeon_class'].capitalize()
+    return out
+
+def floorstats(uuid, profilejson, dungeon, floor):
+    out = {}
+    data = profilejson['profile']['members'][uuid]['dungeons']['dungeon_types'][dungeon]
+    floor = str(floor)
+    try:
+        out['Total Runs'] = data['times_played'][floor]
+    except KeyError:
+        pass
+    try:
+        out['Total Completions'] = data['tier_completions'][floor]
+    except KeyError:
+        pass
+    try:
+        out['Fastest Time'] = formattime(data['fastest_time'][floor])
+    except KeyError:
+        pass   
+    try:
+        out['Best Score'] = data['best_score'][floor]
+    except KeyError:
+        pass 
+
+    return out          
 
 def cleanskills(uuid,profilejson):
     # Info for all skills
