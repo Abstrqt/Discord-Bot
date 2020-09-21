@@ -436,6 +436,7 @@ class skills(commands.Cog):
                                     self.client.loop.create_task(add_reactions(firstpage))
                                     break
                                 elif str(reaction.emoji) == '◀️' and page != 1:
+                                    page = 1
                                     await msg.edit(embed=commonskill('Catacombs'))
                                     await msg.remove_reaction(reaction, user)    
 
