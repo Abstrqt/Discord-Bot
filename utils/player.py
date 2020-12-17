@@ -69,15 +69,8 @@ def allskills(uuid,profilejson):
             xp = profilejson['profile']['members'][uuid]['experience_skill_{}'.format(skill)]
         except KeyError:
             return APIDisabledError
-        if skill != 'runecrafting':
-            level = closest(list(itertools.accumulate(constants.skillxp)),xp)
-            if level < 50:
-                nextxp = nicenum(xp-sum(constants.skillxp[:level+1]))
-                nextlevel = nicenum(constants.skillxp[level+1])
-            else:
-                nextxp = None
-                nextlevel = None
-        else:
+            
+        if skill == 'runecrafting': 
             level = closest(list(itertools.accumulate(constants.runecraftingxp)),xp)
             if level < 24:
                 nextxp = nicenum(xp-sum(constants.runecraftingxp[:level+1]))
@@ -86,19 +79,49 @@ def allskills(uuid,profilejson):
                 nextxp = None
                 nextlevel = None
 
+        elif skill == 'enchanting':
+            level = closest(list(itertools.accumulate(constants.skillxp)),xp)
+            if level < 60:
+                nextxp = nicenum(xp-sum(constants.skillxp[:level+1]))
+                nextlevel = nicenum(constants.skillxp[level+1])
+            else:
+                nextxp = None
+                nextlevel = None  
+
+        elif skill == 'farming':
+            capincrease=0
+            if 'farming_level_cap' in profilejson['profile']['members'][uuid]['jacob2']['perks']:
+                capincrease = profilejson['profile']['members'][uuid]['jacob2']['perks']['farming_level_cap']
+            level = closest(list(itertools.accumulate(constants.skillxp[:51+capincrease])),xp)
+            if level < 60:
+                nextxp = nicenum(xp-sum(constants.skillxp[:level+1]))
+                nextlevel = nicenum(constants.skillxp[level+1])
+            else:
+                nextxp = None
+                nextlevel = None  
+
+        else:
+            level = closest(list(itertools.accumulate(constants.skillxp[:51])),xp)
+            if level < 50:
+                nextxp = nicenum(xp-sum(constants.skillxp[:level+1]))
+                nextlevel = nicenum(constants.skillxp[level+1])
+            else:
+                nextxp = None
+                nextlevel = None        
+
         bonus = skillbonus(skill, level)
         totalxp += xp
 
         if skill != 'runecrafting' and skill != 'carpentry':
             skillsum += level
 
-
         out[skill.capitalize()] = [level, nicenum(xp), nextxp, nextlevel, bonus]
     
     out['True Skill Average'] = skillsum/8
     out['Total Skill XP'] = nicenum(totalxp)
     out['runetotal'] = nicenum(sum(constants.runecraftingxp))
-    out['skilltotal'] = nicenum(sum(constants.skillxp))
+    out['skilltotal'] = nicenum(sum(constants.skillxp[:51]))
+    out['60total'] = nicenum(sum(constants.skillxp))
 
     return out
 

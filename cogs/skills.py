@@ -60,8 +60,8 @@ class skills(commands.Cog):
                         'combat':['%', 'Crit Chance', '⚔️', 2],
                         'foraging':['','Strength', '🪓', 3],
                         'farming':['', 'Health', '🌾', 4],
-                        'alchemy':['', 'Int', '⚗️', 6],
-                        'enchanting':['', 'Int', '📚', 7],
+                        'alchemy':['', 'Intelligence', '⚗️', 6],
+                        'enchanting':['', 'Intelligence', '📚', 7],
                         'fishing':['', 'Health', '🎣', 5],
                         'mining':['', 'Defense', '⛏️', 8],
                         'runecrafting':['','','🔮', 10],
@@ -98,6 +98,9 @@ class skills(commands.Cog):
                 if skill == 'Runecrafting':
                     maxxp = 'runetotal'
                     maxlevel = 24
+                elif skill == 'Enchanting' or 'Farming':
+                    maxxp = '60total'
+                    maxlevel = 60
 
                 embed = discord.Embed(title = '{0} Skill - {1} ({2})'.format(skill,profileinfo[0],profileinfo[2]), 
                                     color = discord.Color.blue(), 
@@ -109,9 +112,14 @@ class skills(commands.Cog):
                                 value = 'Total Progress: (**{}**/{})'.format(skills[skill][1],skills[maxxp]),
                                 inline=False)   
                 if skills[skill][4] != None:
-                    embed.add_field(name = 'Skill Bonus:', 
-                                    value = '>>> **+{0}{1}** {2}'.format(skills[skill][4],bonustype[skill.lower()][0],bonustype[skill.lower()][1]), 
-                                    inline=False)
+                    if skill == 'Enchanting': 
+                        embed.add_field(name = 'Skill Bonus:', 
+                                        value = '>>> **+{0}{1}** {2}\n **+{3}%** Ability Damage'.format(skills[skill][4],bonustype[skill.lower()][0],bonustype[skill.lower()][1], skills[skill][0]*0.5), 
+                                        inline=False)
+                    else:
+                        embed.add_field(name = 'Skill Bonus:', 
+                                        value = '>>> **+{0}{1}** {2}'.format(skills[skill][4],bonustype[skill.lower()][0],bonustype[skill.lower()][1]), 
+                                        inline=False)
                 if skills[skill][0] < maxlevel:   
                     embed.add_field(name = 'Progress to {0} {1}:'.format(skill,skills[skill][0]+1), 
                                     value = '>>> (**{0}**/{1})'.format(skills[skill][2],skills[skill][3]), 
