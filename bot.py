@@ -16,7 +16,7 @@ cluster = MongoClient('mongodb+srv://{}@cluster0.dbfoh.mongodb.net/BetterSB?retr
 db = cluster['BetterSB']
 collection = db['misc']
 
-client = commands.Bot(command_prefix = '!')
+client = commands.Bot(command_prefix = '!', intents=discord.Intents.all())
 client.remove_command('help')
 
 @client.event

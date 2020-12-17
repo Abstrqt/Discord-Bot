@@ -21,12 +21,15 @@ async def run():
     url = 'https://api.hypixel.net/skyblock/auctions?key={}&page='.format(constants.key)
     async with ClientSession() as session:
         page  = await getpage(url+str(0),session)
-        page = page['totalPages']+1
-        for x in range(0,page):
-            task = asyncio.ensure_future(getpage(url+str(x), session))
-            tasks.append(task)
-        responses = await asyncio.gather(*tasks)
-    constants.pagerefresh = time.time()
+        try:
+            page = page['totalPages']+1
+            for x in range(0,page):
+                task = asyncio.ensure_future(getpage(url+str(x), session))
+                tasks.append(task)
+            responses = await asyncio.gather(*tasks)
+            constants.pagerefresh = time.time()
+        except Exception as e:
+            pass
     #print('{} pages'.format(page))
     #print('Cached in %s seconds' % (time.time()-start_time))
 

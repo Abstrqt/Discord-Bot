@@ -37,7 +37,8 @@ class profile(commands.Cog):
 
             embed = discord.Embed(title = 'Profile Info - {}'.format(profileinfo[0]), color = discord.Color.blue(), timestamp = datetime.datetime.utcnow())
             embed.set_footer(icon_url = member.avatar_url, text = 'Requested by {0} '.format(ctx.author))
-            embed.set_thumbnail(url = 'https://visage.surgeplay.com/head/{}'.format(profileinfo[1])) 
+            embed.set_thumbnail(url = 'https://visage.surgeplay.com/head/{}'.format(profileinfo[1]))
+            embed.set_image(url=f'https://gen.plancke.io/exp/{profileinfo[0]}.png') 
 
             if guild != None:
                 embed.add_field(name = 'Guild', value = '>>> **{0} - joined {1}**\nRank: {2}'.format(guild[0],guild[1],guild[2]), inline = False)
