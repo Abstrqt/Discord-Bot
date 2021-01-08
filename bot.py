@@ -43,7 +43,7 @@ async def on_message(message):
             embed = discord.Embed(title = 'Help Menu', color = discord.Color.blue(), description = 'For more information about a command, type !help [command]\nFor example: ``!help verify``\nNote that <> indicates a necessary argument and [] means an argument can be ommited')
             embed.add_field(name = ':tools: General', value = '```verify, help, profile, events```',inline=False)
             embed.add_field(name = ':muscle: Player Stats', value = '```bank, purse, milestones, pets, skills, slayers```',inline=False)
-            embed.add_field(name = ':game_die: Auction House', value = '```auctionviewer```',inline=False)
+            embed.add_field(name = ':game_die: Auction House/Bazaar', value = '```auctionviewer, bazaar```',inline=False)
             embed.add_field(name = ':thinking: Calculators', value = '```calcpet, calcskill, calcxp```',inline=False)
             embed.add_field(name = ':mag_right: Misc.', value = '```botstats, info, serverconfig```',inline=False) 
             await message.channel.send(embed=embed)

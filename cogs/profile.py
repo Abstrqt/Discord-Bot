@@ -31,7 +31,7 @@ class profile(commands.Cog):
             elif profileinfo == APIError:
                 raise APIError
 
-            guild = api.guildinfo(profileinfo[1])
+            guild = await api.guildinfo(profileinfo[1])
             if guild == APIError:
                 raise APIError
 

@@ -2,7 +2,6 @@ import asyncio
 import datetime
 import aiohttp
 import time
-import requests
 import json
 
 from aiohttp import ClientSession
@@ -82,21 +81,22 @@ async def playerdiscord(ign):
     except APIError:
         return APIError
 
-def guildinfo(uuid):
+async def guildinfo(uuid):
     try:
-        response = requests.get('https://api.hypixel.net/guild?key={0}&player={1}'.format(key,uuid))
-        if response.status_code != 200:
-            raise APIError
-        response = response.json()
-        if response['guild'] != None:
-            guild = response['guild']['name']
-            for items in response['guild']['members']:
-                if items['uuid'] == str(uuid):
-                    joined = datetime.datetime.fromtimestamp(items['joined']/1000).strftime('%m/%d/%Y')
-                    rank = items['rank']
-                    return guild,joined,rank
-        else:
-            return None
+        async with ClientSession() as session:
+            async with session.get(f'https://api.hypixel.net/guild?key={key}&player={uuid}') as response:
+                if response.status != 200:
+                    raise APIError
+                response_json = await response.json()
+                if response_json['guild'] != None:
+                    guild = response_json['guild']['name']
+                    for items in response_json['guild']['members']:
+                        if items['uuid'] == str(uuid):
+                            joined = datetime.datetime.fromtimestamp(items['joined']/1000).strftime('%m/%d/%Y')
+                            rank = items['rank']
+                            return guild,joined,rank
+                else:
+                    return None
     except APIError:
         return APIError
 
@@ -109,5 +109,27 @@ async def eventtime(url):
                     raise APIError
                 response_json = await response.json()
                 return response_json['estimate']/1000
+    except APIError:
+        return APIError
+
+async def products():
+    try:
+        async with ClientSession() as session:
+            async with session.get(f'https://api.hypixel.net/skyblock/bazaar/products?key={key}') as response:
+                if response.status != 200:
+                    raise APIError
+                response_json = await response.json()
+                return response_json['productIds']
+    except APIError:
+        return APIError
+            
+async def productinfo(productid):
+    try:
+        async with ClientSession() as session:
+            async with session.get(f'https://api.hypixel.net/skyblock/bazaar/product?key={key}&productId={productid}') as response:
+                if response.status != 200:
+                    raise APIError
+                response_json = await response.json()
+                return response_json['product_info']
     except APIError:
         return APIError
