@@ -52,7 +52,11 @@ class bazaar(commands.Cog):
                     continue
                 if searchfor[0] == 'e' or searchfor[0] == 'ench':
                     searchfor[0] = 'enchanted'
+                if searchfor == curItem:
+                    match = item
+                    break
                 curC = 0
+
                 for i in range (len(searchfor)):
                     for k in range(len(curItem)):
                         for j in range (min(len(searchfor[i]), len(curItem[k]))):
@@ -84,6 +88,9 @@ class bazaar(commands.Cog):
                     dates.append(datetime.datetime.fromtimestamp(data['week_historic'][x]['timestamp']/1000)) 
                     buy.append(data['week_historic'][x]['buyCoins']/data['week_historic'][x]['buyVolume'])
                     sell.append(data['week_historic'][x]['sellCoins']/data['week_historic'][x]['sellVolume'])
+
+            if buy == [] or sell == [] or dates == []:
+                raise ZeroDivisionError(productid)
 
             fig, ax = plt.subplots(figsize = (10,8))
 
@@ -121,6 +128,9 @@ class bazaar(commands.Cog):
         
         except (APIError):
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(),description='There was an issue contacting the API')
+            await msg.edit(embed=embed)
+        except (ZeroDivisionError) as item:
+            embed = discord.Embed(title = 'Error!', color = discord.Color.red(),description=f'No item data for {item}')
             await msg.edit(embed=embed)
         except Exception:
             embed = discord.Embed(title = 'Error!', color = discord.Color.red(),description='Please give a product name')
