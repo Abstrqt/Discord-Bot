@@ -59,9 +59,12 @@ class bazaar(commands.Cog):
                             if searchfor[i][j] == curItem[k][j] and searchfor[i][0] == curItem[k][0]:
                                 curC += 1
 
-                if curC >= highC and highC/len(match.replace('_','')) < curC/len(''.join(curItem)):
-                    highC = curC
-                    match = item
+                    if curC > highC:
+                        highC = curC
+                        match = item
+                    elif highC/len(match.replace('_','')) < curC/len(''.join(curItem)) and curC == highC:
+                        highC = curC
+                        match = item
 
             productid = match 
             if match in converted:
