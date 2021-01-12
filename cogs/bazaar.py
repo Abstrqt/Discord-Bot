@@ -97,7 +97,7 @@ class bazaar(commands.Cog):
             plt.title('Click to Enlarge')
             plt.plot_date(dates,buy,color='#47a0ff', linestyle='-', ydate=False, xdate=False,label='Buy')
             plt.plot_date(dates,sell,color='#fac32a', linestyle='-', ydate=False, xdate=False,label='Sell')
-            plt.figtext(0.5, 0.01, f'*{buy[-1]-buy[0]:+.2f} in buy price and {sell[-1]-sell[0]:+.2f} in sell price in the past week', wrap=True,horizontalalignment='center', fontsize=18)
+            plt.figtext(0.5, 0.01, f'*{float(nicenum(buy[-1]-buy[0])[0:-1]):+g}{nicenum(buy[-1]-buy[0])[-1]} in buy price and {float(nicenum(sell[-1]-sell[0])[0:-1]):+g}{nicenum(sell[-1]-sell[0])[-1]} in sell price overall', wrap=True,horizontalalignment='center', fontsize=18)
 
             loc = mdates.DayLocator()
             formatter = DateFormatter('%d %b')

@@ -6,6 +6,11 @@ from utils import auctions
 
 def nicenum(num):
     # Convert into num shorthand
+    neg = False
+    if num < 0:
+        neg = True
+        num *= (-1)
+
     if num > 999999:
         num=str(round(num/1000000,2))
         num+='M'
@@ -14,6 +19,9 @@ def nicenum(num):
         num+='K'
     else:
         num = str(round(num,2))
+
+    if neg == True:
+        return '-'+num
     return num
 
 def closest(lst, k): 
